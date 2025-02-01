@@ -58,5 +58,9 @@ def login():
 @app.route('/signedin', methods=['POST', 'GET'])
 def signedin():
     return render_template('signedin.html')
+
+@app.route('/fach_hinzufügen', methods=['POST', 'GET'])
+def fächer():
+    return render_template('fach_hinzufügen.html')
 if __name__ == '__main__':
     app.run(debug=True)

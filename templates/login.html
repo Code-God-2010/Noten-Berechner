@@ -4,8 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+    <style>
+        .norm-div{
+            color: black;
+            background-color: rgb(181, 255, 255);
+            text-align: center;
+            padding: 10px;
+            margin: auto;
+            border-radius: 12px;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+            font-size: 24px;
+            width: 500px;
+        }
+        a{
+            color: black;
+        }
+        .link:hover{
+            color: green;
+            text-decoration: underline;
+        }
+        body{
+            background-color: rgb(229, 247, 250);
+        }
+        h1{
+            color: black;
+            font-size: 48px;
+            text-align: center;
+            padding: 15px;
+        }
+    </style>
 </head>
 <body>
+    <h1>Einloggen</h1>
+    <div class="norm-div">
     <form method="post">
         <label for="username">Benutzername:</label><br>
         <input type="text" id="username" name="username" required><br>
@@ -16,6 +47,7 @@
     {% if error %}
     <p style="color: red;">{{ error }}</p>
     {% endif %}
-    <a href="/signup">Noch keinen Account?</a>
+    <a class="link" href="/signup">Noch keinen Account?</a>
+    </div>
 </body>
 </html>

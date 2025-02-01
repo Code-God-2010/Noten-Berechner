@@ -45,6 +45,14 @@ def home():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    if len(request.form)>0:
+        username = request.form.get('username')
+        password = request.form.get('password')
+        user = User.query.filter_by(username=username, password=password).first()
+        if user:
+            return redirect('/signedin')
+        else:
+            return render_template('login.html', error='Benutzername oder Passwort ist falsch')
     return render_template('login.html')
 
 @app.route('/signedin', methods=['POST', 'GET'])

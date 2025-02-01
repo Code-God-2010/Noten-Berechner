@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <form method="post">
+        <label for="username">Benutzername:</label><br>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">Passwort:</label><br>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" value="Anmelden">
+    </form>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <a href="/signup">Noch keinen Account?</a>
+</body>
+</html>

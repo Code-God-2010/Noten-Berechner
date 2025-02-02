@@ -1,0 +1,1 @@
+/fach_uebersicht/<str:subject>

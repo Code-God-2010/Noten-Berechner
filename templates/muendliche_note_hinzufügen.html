@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mündliche Note Hinzufügen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Mündliche Note Hinzufügen</h1>
+    <div class="norm-div">
+        <form method="post">
+            <label for="subject">Fach:</label><br>
+            <input class="input" type="text" id="subject" name="subject" required><br>
+            <label for="grade">Note:</label><br>
+            <input class="input" type="number" id="grade" name="grade" min="1" max="6" step="0.25" required><br>
+            <input type="submit" value="Hinzufügen">
+        </form>
+        {% if error %}
+        <p style="color: red;">{{ error }}</p><br>
+        {% endif %}
+        <a class="link" href="/signedin">Home</a>
+    </div>
+</body>
+</html>

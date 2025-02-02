@@ -40,3 +40,20 @@ ol{
     font-size: 20px;
     width: 150px;
 }
+img{
+    width: 450px;
+    height: auto;
+    margin: auto;
+    display: block;
+    border-radius: 12px;
+    padding: 10px;
+}
+input[type='submit']{
+    border-radius: 12px;
+    height: 30px;
+    font-size: 20px;
+    width: 200px;
+    color: black;
+    cursor: pointer;
+    margin: 10px;
+}

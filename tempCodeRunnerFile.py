@@ -1,1 +1,1 @@
-/fach_uebersicht/<str:subject>
+/muendliche_note_hinzufügen

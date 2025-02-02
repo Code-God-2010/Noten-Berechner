@@ -142,6 +142,32 @@ def reset():
                 db.session.commit()
         return redirect('/signedin')
     return render_template('reset.html')
-
+@app.route('/delete', methods=['GET', 'POST'])
+def delete():
+    if len(request.form)>0:
+        captcha = request.form.get('captcha')
+        if captcha == 'W68HP':
+            noten = []
+            muendliche_noten = []
+            user = User.query.filter_by(id=current_id).first()
+            fach = Fach.query.filter_by(user_id=user.id).all()
+            for f in fach:
+                noten.append(Note.query.filter_by(fach_id=f.id).all())
+                muendliche_noten.append(Muendliche_Note.query.filter_by(fach_id=f.id).all())
+            for note in noten:
+                for n in note:
+                    db.session.delete(n)
+                    db.session.commit()
+            for muendliche_note in muendliche_noten:
+                for mn in muendliche_note:
+                    db.session.delete(mn)
+                    db.session.commit()
+            for f in fach:
+                db.session.delete(f)
+                db.session.commit()
+            db.session.delete(user)
+            db.session.commit()
+        return redirect('/')
+    return render_template('delete.html')
 if __name__ == '__main__':
     app.run(debug=True)

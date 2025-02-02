@@ -4,37 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fach Hinzufügen</title>
-    <style>
-        .norm-div{
-            color: black;
-            background-color: rgb(181, 255, 255);
-            text-align: center;
-            padding: 10px;
-            margin: auto;
-            border-radius: 12px;
-            box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-            font-size: 24px;
-            width: 500px;
-        }
-        a{
-            color: black;
-        }
-        .link:hover{
-            color: green;
-            text-decoration: underline;
-        }
-        body{
-            background-color: rgb(229, 247, 250);
-        }
-        h1{
-            color: black;
-            font-size: 48px;
-            text-align: center;
-            padding: 15px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Fach Hinzufügen</h1>
+    <div class="norm-div">
+        <form method="post">
+            <label for="name">Name:</label>
+            <input class="input" type="text" id="name" name="name" required><br>
+            <input type="submit" value="Hinzufügen">
+        </form>
+        <a class="link" href="/signedin">Home</a>
+    </div>
 </body>
 </html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject.name }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>{{ subject.name }}</h1>
+    <div class="norm-div">
+        <p>Noten:</p>
+        <ol>
+            {% for grade in noten %}
+                <li>{{ grade.wert }}</li>
+            {% endfor %}
+        </ol>
+        <p>Muendliche Noten:</p>
+        <ol>
+            {% for grade in muendliche_noten %}
+                <li>{{ grade.wert }}</li>
+            {% endfor %}
+        </ol>
+        {% if noten_avg %}
+        <p>Noten Durchschnitt: {{ noten_avg }}</p>
+        {% endif %}
+        {% if muendliche_noten_avg %}
+        <p>Muendliche Noten Durchschnitt: {{ muendliche_noten_avg }}</p>
+        {% endif %}
+        <a class="link" href="/signedin">Home</a>
+    </div>
+</body>
+</html>

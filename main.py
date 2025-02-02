@@ -14,7 +14,7 @@ class User(db.Model):
 
 class Fach(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(80), nullable=False)
     noten = db.relationship('Note', backref = 'fach', lazy = 'dynamic')
     muendliche_noten = db.relationship('Muendliche_Note', backref = 'fach', lazy = 'dynamic')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -31,6 +31,7 @@ class Muendliche_Note(db.Model):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/signup', methods=['POST', 'GET'])
 def home():
+    global current_id
     if len(request.form)>0:
         username = request.form.get('username')
         password = request.form.get('password')
@@ -38,6 +39,7 @@ def home():
         try:
             db.session.add(user)
             db.session.commit()
+            current_id = user.id
         except sqlalchemy.exc.IntegrityError:
             return render_template('signup.html', error='Benutzername wird bereits benutzt')
         return redirect('/signedin')
@@ -45,11 +47,13 @@ def home():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    global current_id
     if len(request.form)>0:
         username = request.form.get('username')
         password = request.form.get('password')
         user = User.query.filter_by(username=username, password=password).first()
         if user:
+            current_id = user.id
             return redirect('/signedin')
         else:
             return render_template('login.html', error='Benutzername oder Passwort ist falsch')
@@ -57,10 +61,45 @@ def login():
 
 @app.route('/signedin', methods=['POST', 'GET'])
 def signedin():
-    return render_template('signedin.html')
+    subjects = Fach.query.filter_by(user_id=current_id).all()
+    return render_template('signedin.html', subjects=subjects)
 
 @app.route('/fach_hinzufügen', methods=['POST', 'GET'])
 def fächer():
+    if len(request.form)>0:
+        name = request.form.get('name')
+        fach = Fach(name=name, user_id=current_id)
+        db.session.add(fach)
+        db.session.commit()
+        return redirect('/signedin')
     return render_template('fach_hinzufügen.html')
+
+@app.route('/fach_uebersicht/<string:subject>')
+def fach_uebersicht(subject):
+    subject_obj = Fach.query.filter_by(name=subject, user_id=current_id).first()
+    noten = Note.query.filter_by(fach_id=subject_obj.id).all()
+    muendliche_noten = Muendliche_Note.query.filter_by(fach_id=subject_obj.id).all()
+    muendliche_noten_avg =  None
+    noten_avg = None
+    if len(noten)>0:
+        noten_avg = sum([note.wert for note in noten]) / len(noten)
+    if len(muendliche_noten)>0:
+        muendliche_noten_avg = sum([muendliche_note.wert for muendliche_note in muendliche_noten]) / len(muendliche_noten)
+    return render_template('fachuebersicht.html', noten_avg=noten_avg, muendliche_noten_avg=muendliche_noten_avg, subject=subject_obj, noten=noten, muendliche_noten=muendliche_noten)
+
+@app.route('/note_hinzufügen', methods=['POST', 'GET'])
+def noten_hinzufügen():
+    if len(request.form)>0:
+        subject = request.form.get('subject')
+        grade = request.form.get('grade')
+        fach_obj = Fach.query.filter_by(name=subject, user_id=current_id).first()
+        if fach_obj:
+            note = Note(wert=grade, fach_id=fach_obj.id)
+            db.session.add(note)
+            db.session.commit()
+            return redirect(f'/fach_uebersicht/{subject}')
+        else:
+            return render_template('note_hinzufügen.html', error='Kein Fach mit diesem Namen gefunden')
+    return render_template('note_hinzufügen.html')
 if __name__ == '__main__':
     app.run(debug=True)

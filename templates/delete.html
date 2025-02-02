@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reset</title>
+    <title>Account Löschen</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Noten zurücksetzen</h1>
+    <h1>Account Löschen</h1>
     <div class="norm-div">
         <img class="captcha" src="https://irp-cdn.multiscreensite.com/3c4f0eef/dms3rep/multi/captcha.JPG" alt="W68HP">
         <form method="post">
             <label for="captcha">Sicherheitscode:</label>
             <input class="input" type="password" id="captcha" name="captcha" required><br>
-            <input type="submit" value="Noten Zurücksetzen">
+            <input type="submit" value="Löschen">
         </form>
         <a class="link" href="/signedin">Home</a>
     </div>

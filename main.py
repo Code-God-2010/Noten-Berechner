@@ -101,5 +101,47 @@ def noten_hinzufügen():
         else:
             return render_template('note_hinzufügen.html', error='Kein Fach mit diesem Namen gefunden')
     return render_template('note_hinzufügen.html')
+
+@app.route('/muendliche_note_hinzufügen', methods=['POST', 'GET'])
+def muendliche_noten_hinzufügen():
+    if len(request.form)>0:
+        subject = request.form.get('subject')
+        grade = request.form.get('grade')
+        fach_obj = Fach.query.filter_by(name=subject, user_id=current_id).first()
+        if fach_obj:
+            muendliche_note = Muendliche_Note(wert=grade, fach_id=fach_obj.id)
+            db.session.add(muendliche_note)
+            db.session.commit()
+            return redirect(f'/fach_uebersicht/{subject}')
+        else:
+            return render_template('muendliche_note_hinzufügen.html', error='Kein Fach mit diesem Namen gefunden')
+    return render_template('muendliche_note_hinzufügen.html')
+
+@app.route('/reset', methods=['GET', 'POST'])
+def reset():
+    if len(request.form)>0:
+        captcha = request.form.get('captcha')
+        if captcha == 'W68HP':
+            noten = []
+            muendliche_noten = []
+            user = User.query.filter_by(id=current_id).first()
+            fach = Fach.query.filter_by(user_id=user.id).all()
+            for f in fach:
+                noten.append(Note.query.filter_by(fach_id=f.id).all())
+                muendliche_noten.append(Muendliche_Note.query.filter_by(fach_id=f.id).all())
+            for note in noten:
+                for n in note:
+                    db.session.delete(n)
+                    db.session.commit()
+            for muendliche_note in muendliche_noten:
+                for mn in muendliche_note:
+                    db.session.delete(mn)
+                    db.session.commit()
+            for f in fach:
+                db.session.delete(f)
+                db.session.commit()
+        return redirect('/signedin')
+    return render_template('reset.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

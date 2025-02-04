@@ -169,5 +169,12 @@ def delete():
             db.session.commit()
         return redirect('/')
     return render_template('delete.html')
+@app.route('/info')
+def info():
+    noten = Note.query.all()
+    schlechteste_note = min([note.wert for note in noten])
+    beste_note = max([note.wert for note in noten])
+    durchschnitt = sum([note.wert for note in noten]) / len(noten) if len(noten) > 0 else 0.0
+    return render_trmplate('info.html', durchschnitt=durchschnitt, beste_note=beste_note, schlechteste_note=schlechteste_note)
 if __name__ == '__main__':
     app.run(debug=True)

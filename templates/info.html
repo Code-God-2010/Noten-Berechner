@@ -7,15 +7,11 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Account Löschen</h1>
+    <h1>Info</h1>
     <div class="norm-div">
-        <img class="captcha" src="https://irp-cdn.multiscreensite.com/3c4f0eef/dms3rep/multi/captcha.JPG" alt="W68HP">
-        <form method="post">
-            <label for="captcha">Sicherheitscode:</label>
-            <input class="input" type="password" id="captcha" name="captcha" required><br>
-            <input type="submit" value="Löschen">
-        </form>
-        <a class="link" href="/signedin">Home</a>
+        <p>Beste Note: {{ beste_note }</p>
+        <p>Schlechteste Note: {{ schlechteste_note }}</p>
+        <p>Durchschnitt Aller Noten: {{ durchschnitt }}</p>
     </div>
 </body>
 </html>

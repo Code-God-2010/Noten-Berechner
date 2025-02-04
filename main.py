@@ -68,8 +68,16 @@ def login():
 
 @app.route('/signedin', methods=['POST', 'GET'])
 def signedin():
+    noten = Note.query.all()
+    beste_note = min([note.wert for note in noten]) if len(noten) > 0 else 0.0
+    schlechteste_note = max([note.wert for note in noten]) if len(noten) > 0 else 0.0
+    durchschnitt = sum([note.wert for note in noten])/len(noten) if len(noten) > 0 else 0.0
+    muendliche_noten = Muendliche_Note.query.all()
+    beste_muendliche_note = min([muendliche_note.wert for muendliche_note in muendliche_noten]) if len(muendliche_noten) > 0 else 0.0
+    schlechteste_muendliche_note = max([muendliche_note.wert for muendliche_note in muendliche_noten]) if len(muendliche_noten) > 0 else 0.0
+    durchschnitt_muendliche_note = sum([muendliche_note.wert for muendliche_note in muendliche_noten])/len(muendliche_noten) if len(muendliche_noten) > 0 else 0.0
     subjects = Fach.query.filter_by(user_id=current_id).all()
-    return render_template('signedin.html', subjects=subjects)
+    return render_template('signedin.html', subjects=subjects, signedin=True, beste_note=beste_note, schlechteste_note=schlechteste_note, durchschnitt=durchschnitt, beste_muendliche_note=beste_muendliche_note, schlechteste_muendliche_note=schlechteste_muendliche_note, durchschnitt_muendliche_note=durchschnitt_muendliche_note)
 
 @app.route('/fach_hinzufügen', methods=['POST', 'GET'])
 def fächer():
@@ -80,7 +88,7 @@ def fächer():
         db.session.add(fach)
         db.session.commit()
         return redirect('/signedin')
-    return render_template('fach_hinzufügen.html', subjects=subjects)
+    return render_template('fach_hinzufügen.html', subjects=subjects, fach_hinzufügen=True)
 
 @app.route('/fach_uebersicht/<string:subject>')
 def fach_uebersicht(subject):
@@ -94,7 +102,7 @@ def fach_uebersicht(subject):
         noten_avg = sum([note.wert for note in noten]) / len(noten)
     if len(muendliche_noten)>0:
         muendliche_noten_avg = sum([muendliche_note.wert for muendliche_note in muendliche_noten]) / len(muendliche_noten)
-    return render_template('fachuebersicht.html', subjects=subjects, noten_avg=noten_avg, muendliche_noten_avg=muendliche_noten_avg, subject=subject_obj, noten=noten, muendliche_noten=muendliche_noten)
+    return render_template('fachuebersicht.html', fach_uebersicht=True, subjects=subjects, noten_avg=noten_avg, muendliche_noten_avg=muendliche_noten_avg, subject=subject_obj, noten=noten, muendliche_noten=muendliche_noten)
 
 @app.route('/note_hinzufügen', methods=['POST', 'GET'])
 def noten_hinzufügen():
@@ -109,8 +117,8 @@ def noten_hinzufügen():
             db.session.commit()
             return redirect(f'/fach_uebersicht/{subject}')
         else:
-            return render_template('note_hinzufügen.html', subjects=subjects, error='Kein Fach mit diesem Namen gefunden')
-    return render_template('note_hinzufügen.html', subjects=subjects)
+            return render_template('note_hinzufügen.html', note_hinzufügen=True, subjects=subjects, error='Kein Fach mit diesem Namen gefunden')
+    return render_template('note_hinzufügen.html', note_hinzufügen=True, subjects=subjects)
 
 @app.route('/muendliche_note_hinzufügen', methods=['POST', 'GET'])
 def muendliche_noten_hinzufügen():
@@ -125,8 +133,8 @@ def muendliche_noten_hinzufügen():
             db.session.commit()
             return redirect(f'/fach_uebersicht/{subject}')
         else:
-            return render_template('muendliche_note_hinzufügen.html', subjects=subjects, error='Kein Fach mit diesem Namen gefunden')
-    return render_template('muendliche_note_hinzufügen.html', subjects=subjects)
+            return render_template('muendliche_note_hinzufügen.html', muendliche_note_hinzufügen=True, subjects=subjects, error='Kein Fach mit diesem Namen gefunden')
+    return render_template('muendliche_note_hinzufügen.html', muendliche_note_hinzufügen=True, subjects=subjects)
 
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
@@ -153,7 +161,7 @@ def reset():
                 db.session.delete(f)
                 db.session.commit()
         return redirect('/signedin')
-    return render_template('reset.html', subjects=subjects)
+    return render_template('reset.html', reset=True, subjects=subjects)
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
     subjects = Fach.query.filter_by(user_id=current_id).all()
@@ -181,6 +189,6 @@ def delete():
             db.session.delete(user)
             db.session.commit()
         return redirect('/')
-    return render_template('delete.html', subjects=subjects)
+    return render_template('delete.html', delete=True, subjects=subjects)
 if __name__ == '__main__':
     app.run(debug=True)

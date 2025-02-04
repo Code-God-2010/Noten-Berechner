@@ -10,12 +10,12 @@
     <h1 class="ultimate-heading">Noten-Berechner</h1>
     <h1>{% block title %}{% endblock %}</h1>
     <div class="links-div">
-        <a class="link" href="/signedin">Übersicht</a><br>
-        <a class="link" href="/fach_hinzufügen">Fach Hinzufügen</a><br>
-        <a class="link" href="note_hinzufügen">Note Hinzufügen</a><br>
-        <a class="link" href="/muendliche_note_hinzufügen">Mündliche Note Hinzufügen</a><br>
-        <a class="link" href="/reset">Reset</a><br>
-        <a class="link" href="/delete">Account Löschen</a><br>
+        <a class="link {{ signedin }}" href="/signedin">Übersicht</a><br>
+        <a class="link {{ fach_hinzufügen }}" href="/fach_hinzufügen">Fach Hinzufügen</a><br>
+        <a class="link {{ note_hinzufügen }}" href="note_hinzufügen">Note Hinzufügen</a><br>
+        <a class="link {{ muendliche_note_hinzufügen }}" href="/muendliche_note_hinzufügen">Mündliche Note Hinzufügen</a><br>
+        <a class="link {{ reset }}" href="/reset">Reset</a><br>
+        <a class="link {{ delete }}" href="/delete">Account Löschen</a><br>
         {% block subject_links %}  
         {% for subject2 in subjects %}
         {% if subject2 != subject %}

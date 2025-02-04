@@ -75,7 +75,17 @@ input[type='submit']{
     padding-right: 12px;
     margin-left: 15px;
 }
-
+.True {
+    animation: active;
+    animation-duration: 0.5s;
+    color: black;
+    text-decoration: underline;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-left: 15px;
+}
 .content {
     margin: auto;
     padding: 15px;

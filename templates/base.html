@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block site_title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1 class="ultimate-heading">Noten-Berechner</h1>
+    <h1>{% block title %}{% endblock %}</h1>
+    <div class="links-div">
+        <a class="link" href="/signedin">Übersicht</a><br>
+        <a class="link" href="/fach_hinzufügen">Fach Hinzufügen</a><br>
+        <a class="link" href="note_hinzufügen">Note Hinzufügen</a><br>
+        <a class="link" href="/muendliche_note_hinzufügen">Mündliche Note Hinzufügen</a><br>
+        <a class="link" href="/reset">Reset</a><br>
+        <a class="link" href="/delete">Account Löschen</a><br>
+        {% block subject_links %}  
+        {% for subject2 in subjects %}
+        {% if subject2 != subject %}
+        <a class="link" href="/fach_uebersicht/{{ subject2.name }}">{{ subject2.name }}</a><br>
+        {% else %}
+        <a class="link active" href="/fach_uebersicht/{{ subject2.name }}">{{ subject2.name }}</a><br>
+        {% endif %}
+        {% endfor %}
+        {% endblock %}
+    </div>
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

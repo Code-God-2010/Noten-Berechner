@@ -1,35 +1,19 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mündliche Note Hinzufügen</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Mündliche Note Hinzufügen</h1>
-    <div class="links-div">
-        <a class="link" href="/fach_hinzufügen">Fach Hinzufügen</a><br>
-        <a class="link" href="note_hinzufügen">Note Hinzufügen</a><br>
-        <a class="link active" href="/muendliche_note_hinzufügen">Mündliche Note Hinzufügen</a><br>
-        <a class="link" href="/reset">Reset</a><br>
-        <a class="link" href="/delete">Account Löschen</a><br>  
-        {% for subject in subjects %}
-        <a class="link" href="/fach_uebersicht/{{ subject.name }}">{{ subject.name }}</a><br>
-        {% endfor %}
-    </div>
-    <div class="content">
-        <form method="post">
-            <label for="subject">Fach:</label><br>
-            <input class="input" type="text" id="subject" name="subject" required><br>
-            <label for="grade">Note:</label><br>
-            <input class="input" type="number" id="grade" name="grade" min="1" max="6" step="0.25" required><br>
-            <input type="submit" value="Hinzufügen">
-        </form>
-        {% if error %}
-        <p style="color: red;">{{ error }}</p>
-        {% endif %}
-        <a class="link" href="/signedin">Home</a>
-    </div>
-</body>
-</html>
+{% extends "base.html" %}
+{% block site_title %}Mündliche Note Hinzufügen{% endblock %}
+{% block title %}Mündliche Note Hinzufügen{% endblock %}
+{% block subject_links %}{{ super() }}{% endblock %}
+{% block content %}
+<div class="content">
+    <form method="post">
+        <label for="subject">Fach:</label><br>
+        <input class="input" type="text" id="subject" name="subject" required><br>
+        <label for="grade">Note:</label><br>
+        <input class="input" type="number" id="grade" name="grade" min="1" max="6" step="0.25" required><br>
+        <input type="submit" value="Hinzufügen">
+    </form>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    <a class="link" href="/signedin">Home</a>
+</div>
+{% endblock %}

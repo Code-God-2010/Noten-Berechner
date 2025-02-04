@@ -2,6 +2,12 @@ from flask import Flask, request, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 import sqlalchemy.exc
+from werkzeug.security import check_password_hash, generate_password_hash
+def hash_password(password):
+    return generate_password_hash(password)
+
+def check_password(hashedPassword, password):
+    return check_password_hash(hashedPassword, password)
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Fächer.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -35,7 +41,8 @@ def home():
     if len(request.form)>0:
         username = request.form.get('username')
         password = request.form.get('password')
-        user = User(username=username, password=password)
+        hashed_password = hash_password(password)
+        user = User(username=username, password=hashed_password)
         try:
             db.session.add(user)
             db.session.commit()
@@ -51,8 +58,8 @@ def login():
     if len(request.form)>0:
         username = request.form.get('username')
         password = request.form.get('password')
-        user = User.query.filter_by(username=username, password=password).first()
-        if user:
+        user = User.query.filter_by(username=username).first()
+        if user and check_password(user.password, password):
             current_id = user.id
             return redirect('/signedin')
         else:

@@ -1,13 +1,19 @@
-.norm-div{
+.links-div{
     color: black;
     background-color: rgb(181, 255, 255);
-    text-align: center;
-    padding: 10px;
-    margin: auto;
+    text-align: left;
+    padding: 20px;
+    padding-left: 50px;
+    margin: 30px;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
     border-radius: 12px;
     box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
     font-size: 24px;
     width: 500px;
+    line-height: 50px;
 }
 a{
     color: black;
@@ -57,4 +63,31 @@ input[type='submit']{
     color: black;
     cursor: pointer;
     margin: 10px;
+}
+.active {
+    animation: active;
+    animation-duration: 0.5s;
+    color: black;
+    text-decoration: underline;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-left: 15px;
+}
+
+.content {
+    margin: auto;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
+    font-size: 24px;
+    width: 500px;
+    text-align: center;
+    background-color: rgb(181, 255, 255);
+}
+
+@keyframes active {
+    from {padding-left: 0px;}
+    to {padding-left: 12px;}
 }

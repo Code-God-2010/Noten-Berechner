@@ -66,16 +66,18 @@ def signedin():
 
 @app.route('/fach_hinzufügen', methods=['POST', 'GET'])
 def fächer():
+    subjects = Fach.query.filter_by(user_id=current_id).all()
     if len(request.form)>0:
         name = request.form.get('name')
         fach = Fach(name=name, user_id=current_id)
         db.session.add(fach)
         db.session.commit()
         return redirect('/signedin')
-    return render_template('fach_hinzufügen.html')
+    return render_template('fach_hinzufügen.html', subjects=subjects)
 
 @app.route('/fach_uebersicht/<string:subject>')
 def fach_uebersicht(subject):
+    subjects = Fach.query.filter_by(user_id=current_id).all()
     subject_obj = Fach.query.filter_by(name=subject, user_id=current_id).first()
     noten = Note.query.filter_by(fach_id=subject_obj.id).all()
     muendliche_noten = Muendliche_Note.query.filter_by(fach_id=subject_obj.id).all()
@@ -85,10 +87,11 @@ def fach_uebersicht(subject):
         noten_avg = sum([note.wert for note in noten]) / len(noten)
     if len(muendliche_noten)>0:
         muendliche_noten_avg = sum([muendliche_note.wert for muendliche_note in muendliche_noten]) / len(muendliche_noten)
-    return render_template('fachuebersicht.html', noten_avg=noten_avg, muendliche_noten_avg=muendliche_noten_avg, subject=subject_obj, noten=noten, muendliche_noten=muendliche_noten)
+    return render_template('fachuebersicht.html', subjects=subjects, noten_avg=noten_avg, muendliche_noten_avg=muendliche_noten_avg, subject=subject_obj, noten=noten, muendliche_noten=muendliche_noten)
 
 @app.route('/note_hinzufügen', methods=['POST', 'GET'])
 def noten_hinzufügen():
+    subjects = Fach.query.filter_by(user_id=current_id).all()
     if len(request.form)>0:
         subject = request.form.get('subject')
         grade = request.form.get('grade')
@@ -99,11 +102,12 @@ def noten_hinzufügen():
             db.session.commit()
             return redirect(f'/fach_uebersicht/{subject}')
         else:
-            return render_template('note_hinzufügen.html', error='Kein Fach mit diesem Namen gefunden')
-    return render_template('note_hinzufügen.html')
+            return render_template('note_hinzufügen.html', subjects=subjects, error='Kein Fach mit diesem Namen gefunden')
+    return render_template('note_hinzufügen.html', subjects=subjects)
 
 @app.route('/muendliche_note_hinzufügen', methods=['POST', 'GET'])
 def muendliche_noten_hinzufügen():
+    subjects = Fach.query.filter_by(user_id=current_id).all()
     if len(request.form)>0:
         subject = request.form.get('subject')
         grade = request.form.get('grade')
@@ -114,11 +118,12 @@ def muendliche_noten_hinzufügen():
             db.session.commit()
             return redirect(f'/fach_uebersicht/{subject}')
         else:
-            return render_template('muendliche_note_hinzufügen.html', error='Kein Fach mit diesem Namen gefunden')
-    return render_template('muendliche_note_hinzufügen.html')
+            return render_template('muendliche_note_hinzufügen.html', subjects=subjects, error='Kein Fach mit diesem Namen gefunden')
+    return render_template('muendliche_note_hinzufügen.html', subjects=subjects)
 
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
+    subjects = Fach.query.filter_by(user_id=current_id).all()
     if len(request.form)>0:
         captcha = request.form.get('captcha')
         if captcha == 'W68HP':
@@ -141,9 +146,10 @@ def reset():
                 db.session.delete(f)
                 db.session.commit()
         return redirect('/signedin')
-    return render_template('reset.html')
+    return render_template('reset.html', subjects=subjects)
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
+    subjects = Fach.query.filter_by(user_id=current_id).all()
     if len(request.form)>0:
         captcha = request.form.get('captcha')
         if captcha == 'W68HP':
@@ -168,6 +174,6 @@ def delete():
             db.session.delete(user)
             db.session.commit()
         return redirect('/')
-    return render_template('delete.html')
+    return render_template('delete.html', subjects=subjects)
 if __name__ == '__main__':
     app.run(debug=True)

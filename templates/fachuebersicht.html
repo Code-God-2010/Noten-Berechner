@@ -1,47 +1,29 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ subject.name }}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>{{ subject.name }}</h1>
-    <div class="links-div">
-        <a class="link" href="/fach_hinzufügen">Fach Hinzufügen</a><br>
-        <a class="link" href="note_hinzufügen">Note Hinzufügen</a><br>
-        <a class="link" href="/muendliche_note_hinzufügen">Mündliche Note Hinzufügen</a><br>
-        <a class="link" href="/reset">Reset</a><br>
-        <a class="link" href="/delete">Account Löschen</a><br>  
-        {% for subject2 in subjects %}
-        {% if subject2.name!= subject.name %}
-        <a class="link" href="/fach_uebersicht/{{ subject2.name }}">{{ subject2.name }}</a><br>
-        {% else %}
-        <a class="link active" href="/fach_uebersicht/{{ subject2.name }}">{{ subject2.name }}</a><br>
-        {% endif %}
+{% extends "base.html" %}
+{% block site_title %}{{ subject.name }}{% endblock %}
+{% block title %}{{ subject.name }}{% endblock %}
+{% block subject_links %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<div class="content">
+    <p>Noten:</p>
+    <ol>
+        {% for grade in noten %}
+            <li>{{ grade.wert }}</li>
         {% endfor %}
-    </div>
-    <div class="content">
-        <p>Noten:</p>
-        <ol>
-            {% for grade in noten %}
-                <li>{{ grade.wert }}</li>
-            {% endfor %}
-        </ol>
-        <p>Muendliche Noten:</p>
-        <ol>
-            {% for grade in muendliche_noten %}
-                <li>{{ grade.wert }}</li>
-            {% endfor %}
-        </ol>
-        {% if noten_avg %}
-        <p>Noten Durchschnitt: {{ noten_avg }}</p>
-        {% endif %}
-        {% if muendliche_noten_avg %}
-        <p>Muendliche Noten Durchschnitt: {{ muendliche_noten_avg }}</p>
-        {% endif %}
-        <a class="link" href="/signedin">Home</a>
-    </div>
-</body>
-</html>
+    </ol>
+    <p>Muendliche Noten:</p>
+    <ol>
+        {% for grade in muendliche_noten %}
+            <li>{{ grade.wert }}</li>
+        {% endfor %}
+    </ol>
+    {% if noten_avg %}
+    <p>Noten Durchschnitt: {{ noten_avg }}</p>
+    {% endif %}
+    {% if muendliche_noten_avg %}
+    <p>Muendliche Noten Durchschnitt: {{ muendliche_noten_avg }}</p>
+    {% endif %}
+    <a class="link" href="/signedin">Home</a>
+</div>
+{% endblock %}

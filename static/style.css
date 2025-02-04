@@ -30,7 +30,8 @@ h1{
     color: black;
     font-size: 48px;
     text-align: center;
-    padding: 15px;
+    padding-top: 75px;
+    padding-bottom: 15px;
     font-weight: bold;
 }
 ol{
@@ -59,7 +60,6 @@ input[type='submit']{
     border-radius: 12px;
     height: 30px;
     font-size: 20px;
-    width: 200px;
     color: black;
     cursor: pointer;
     margin: 10px;
@@ -90,4 +90,17 @@ input[type='submit']{
 @keyframes active {
     from {padding-left: 0px;}
     to {padding-left: 12px;}
+}
+
+.ultimate-heading{
+    color: black;
+    font-size: 75px;
+    text-decoration: none;
+    left: 0%;
+    top: 0%;
+    width: 350px;
+    position: absolute;
+    text-align: left;
+    padding-top: 22px;
+    padding-left: 150px;
 }

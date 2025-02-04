@@ -6,24 +6,23 @@
 {% endblock %}
 {% block content %}
 <div class="content">
-    <p>Noten:</p>
+    <h3>Noten:</h3>
     <ol>
         {% for grade in noten %}
-            <li>{{ grade.wert }}</li>
-        {% endfor %}
-    </ol>
-    <p>Muendliche Noten:</p>
-    <ol>
-        {% for grade in muendliche_noten %}
             <li>{{ grade.wert }}</li>
         {% endfor %}
     </ol>
     {% if noten_avg %}
     <p>Noten Durchschnitt: {{ noten_avg }}</p>
     {% endif %}
+    <h3>Muendliche Noten:</h3>
+    <ol>
+        {% for grade in muendliche_noten %}
+            <li>{{ grade.wert }}</li>
+        {% endfor %}
+    </ol>
     {% if muendliche_noten_avg %}
     <p>Muendliche Noten Durchschnitt: {{ muendliche_noten_avg }}</p>
     {% endif %}
-    <a class="link" href="/signedin">Home</a>
 </div>
 {% endblock %}

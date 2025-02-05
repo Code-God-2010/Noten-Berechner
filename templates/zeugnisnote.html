@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block site_title %}Zeugnisnote Berechnen{% endblock %}
+{% block title %}Zeugnisnote Berechnen{% endblock %}
+{% block subject_links %}{{ super() }}{% endblock %}
+{% block content %}
+<div class="content">
+    <form method="post">
+        <label for="fach">Fach:</label><br>
+        <input type="text" id="fach" name="fach"><br><br>
+        <label for="muendlich">Mündliche Note Verwenden:</label>
+        <input type="checkbox" name="muendlich" value="True"><br><br>
+        <label for="muendlich_prozent">Prozent die die mündliche Note zählt:</label>
+        <input type="number" id="muendlich_prozent" name="muendlich_prozent" min="0" max="100" step="1"><br><br>
+        <input type="submit" value="Berechnen">
+    </form>
+    {% if error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+    {% if note %}
+    <h3>Deine Note ist:</h3>
+    <p>{{ note }}</p>
+    {% endif %}
+</div>
+{% endblock %}

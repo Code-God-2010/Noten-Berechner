@@ -64,6 +64,10 @@ input[type='submit']{
     cursor: pointer;
     margin: 10px;
 }
+input[type='checkbox']{
+    width: 20px;
+    height: 20px;
+}
 .active {
     animation: active;
     animation-duration: 0.5s;

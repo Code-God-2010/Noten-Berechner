@@ -22,6 +22,8 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     fächer = db.relationship('Fach', backref = 'user', lazy = 'dynamic')
+    noten = db.relationship('Note', backref = 'user', lazy = 'dynamic')
+    muendliche_noten = db.relationship('Muendliche_Note', backref = 'user', lazy = 'dynamic')
 
 class Fach(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,11 +36,13 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     wert = db.Column(db.Integer, nullable=False)
     fach_id = db.Column(db.Integer, db.ForeignKey('fach.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 class Muendliche_Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     wert = db.Column(db.Integer, nullable=False)
     fach_id = db.Column(db.Integer, db.ForeignKey('fach.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 @login_manager.user_loader
 def loader_user(user_id):
@@ -84,11 +88,11 @@ def logout():
 
 @app.route('/signedin', methods=['POST', 'GET'])
 def signedin():
-    noten = Note.query.all()
+    noten = Note.query.filter_by(user_id=current_id).all()
     beste_note = min([note.wert for note in noten]) if len(noten) > 0 else 0.0
     schlechteste_note = max([note.wert for note in noten]) if len(noten) > 0 else 0.0
     durchschnitt = sum([note.wert for note in noten])/len(noten) if len(noten) > 0 else 0.0
-    muendliche_noten = Muendliche_Note.query.all()
+    muendliche_noten = Muendliche_Note.query.filter_by(user_id=current_id).all()
     beste_muendliche_note = min([muendliche_note.wert for muendliche_note in muendliche_noten]) if len(muendliche_noten) > 0 else 0.0
     schlechteste_muendliche_note = max([muendliche_note.wert for muendliche_note in muendliche_noten]) if len(muendliche_noten) > 0 else 0.0
     durchschnitt_muendliche_note = sum([muendliche_note.wert for muendliche_note in muendliche_noten])/len(muendliche_noten) if len(muendliche_noten) > 0 else 0.0
@@ -128,7 +132,7 @@ def noten_hinzufügen():
         grade = request.form.get('grade')
         fach_obj = Fach.query.filter_by(name=subject, user_id=current_id).first()
         if fach_obj:
-            note = Note(wert=grade, fach_id=fach_obj.id)
+            note = Note(wert=grade, fach_id=fach_obj.id, user_id=current_id)
             db.session.add(note)
             db.session.commit()
             return redirect(f'/fach_uebersicht/{subject}')
@@ -144,7 +148,7 @@ def muendliche_noten_hinzufügen():
         grade = request.form.get('grade')
         fach_obj = Fach.query.filter_by(name=subject, user_id=current_id).first()
         if fach_obj:
-            muendliche_note = Muendliche_Note(wert=grade, fach_id=fach_obj.id)
+            muendliche_note = Muendliche_Note(wert=grade, fach_id=fach_obj.id, user_id=current_id)
             db.session.add(muendliche_note)
             db.session.commit()
             return redirect(f'/fach_uebersicht/{subject}')

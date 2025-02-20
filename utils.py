@@ -7,3 +7,4 @@ def add_subject(subject_name):
         new_subject = Fach(name=subject_name, user_id=1)
         db.session.add(new_subject)
         db.session.commit()
+create_db()

@@ -1,6 +1,21 @@
+:root {
+    --background: #F1F1F2;
+    --divColor: #A1D6E2;
+    --linkHover: #1995AD;
+    --textColor: #000000;
+}
+.subjects {
+    left: 66%;
+    max-height: 650px;
+    overflow: scroll;
+}
+.grades {
+    height: 124px;
+    overflow: scroll;
+}
 .links-div{
-    color: black;
-    background-color: rgb(181, 255, 255);
+    color: var(--textColor);
+    background-color: var(--divColor);
     text-align: left;
     padding: 20px;
     padding-left: 50px;
@@ -16,18 +31,18 @@
     line-height: 50px;
 }
 a{
-    color: black;
+    color: var(--textColor);
     font-size: 20;
 }
 .link:hover{
-    color: green;
+    color: var(--linkHover);
     text-decoration: underline;
 }
 body{
-    background-color: rgb(229, 247, 250);
+    background-color: var(--background);
 }
 .heading{
-    color: black;
+    color: var(--textColor);
     font-size: 48px;
     text-align: center;
     padding-top: 75px;
@@ -48,30 +63,23 @@ ol{
     font-size: 20px;
     width: 150px;
 }
-img{
-    width: 450px;
-    height: auto;
-    margin: auto;
-    display: block;
-    border-radius: 12px;
-    padding: 10px;
-}
 input[type='submit']{
     border-radius: 12px;
     height: 30px;
     font-size: 20px;
-    color: black;
+    color: #000000;
     cursor: pointer;
     margin: 10px;
 }
 input[type='checkbox']{
     width: 20px;
     height: 20px;
+    color: #000000;
 }
 .active {
     animation: active;
     animation-duration: 0.5s;
-    color: black;
+    color: var(--textColor);
     text-decoration: underline;
     padding-top: 12px;
     padding-bottom: 12px;
@@ -82,7 +90,7 @@ input[type='checkbox']{
 .True {
     animation: active;
     animation-duration: 0.5s;
-    color: black;
+    color: var(--textColor);
     text-decoration: underline;
     padding-top: 12px;
     padding-bottom: 12px;
@@ -98,7 +106,8 @@ input[type='checkbox']{
     font-size: 24px;
     width: 500px;
     text-align: center;
-    background-color: rgb(181, 255, 255);
+    background-color: var(--divColor);
+    color: var(--textColor);
 }
 
 @keyframes active {
@@ -107,7 +116,7 @@ input[type='checkbox']{
 }
 
 .ultimate-heading{
-    color: black;
+    color: var(--textColor);
     font-size: 75px;
     text-decoration: none;
     left: 0%;
@@ -118,4 +127,5 @@ input[type='checkbox']{
     margin-top: 0%;
     padding-top: 15px;
     padding-left: 150px;
+}
 }

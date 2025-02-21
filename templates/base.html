@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block site_title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
     <h1 class="ultimate-heading">Noten-Berechner</h1>
     <h1 class="heading">{% block title %}{% endblock %}</h1>
+    <button onclick="darkMode()">Dark Mode</button>
+    <button onclick="lightMode()">Light Mode</button>
     <div class="links-div">
         <a class="link {{ signedin }}" href="/signedin">Übersicht</a><br>
         <a class="link {{ zeugnisnote }}" href="/zeugnisnote">Zeugnisnote Berechnen</a><br>
@@ -18,6 +21,11 @@
         <a class="link {{ reset }}" href="/reset">Reset</a><br>
         <a class="link {{ delete }}" href="/delete">Account Löschen</a><br>
         <a class="link {{ logout }}" href="/logout">Logout</a><br>
+    </div>
+    {% block content %}
+    {% endblock %}
+    <div class="subjects links-div">
+        <h2>Fächer:</h2>
         {% block subject_links %}  
         {% for subject2 in subjects %}
         {% if subject2 != subject %}
@@ -28,7 +36,5 @@
         {% endfor %}
         {% endblock %}
     </div>
-    {% block content %}
-    {% endblock %}
 </body>
 </html>

@@ -1,3 +1,45 @@
+"""
+1.
+User Profile:
+Implement a user profile page where users can view and edit their personal information, such as name, email, and password.
+Add a feature to change the password securely.
+2.
+Subject Management:
+Allow users to edit or delete subjects they have added.
+3.
+Note Management:
+Allow users to edit or delete notes they have added.
+Implement a feature to sort notes by subject or grade.
+Add a feature to filter notes by subject or grade range.
+4.
+UI Design:
+Use a responsive design to ensure the application looks good on different devices.
+Implement a clean and intuitive user interface with clear navigation and easy-to-understand instructions.
+Use color schemes that are friendly and appealing to the eyes.
+Add a feature to customize the appearance of the application, such as changing the font, background color, or layout.
+7.
+Security:
+Implement a secure login system with password hashing and salting.
+Add a feature to reset the password if the user forgets it.
+Implement a feature to delete the user's account and all associated data.
+8.
+Data Validation:
+Validate user inputs to ensure they are in the correct format and within the expected range.
+Implement a feature to prevent users from entering invalid grades or subjects.
+10.
+Accessibility:
+Ensure the application is accessible to users with disabilities by following WCAG (Web Content Accessibility Guidelines) standards.
+Add a feature to adjust the font size and contrast for better readability.
+Implement a feature to provide alternative text descriptions for images.
+11.
+Internationalization:
+Add support for multiple languages, allowing users to switch between different languages for the application interface.
+Implement a feature to display dates and times in the user's preferred format.
+12.
+Performance Optimization:
+Optimize the database queries to improve the application's performance.
+Implement caching mechanisms to reduce the number of database queries.
+"""
 from flask import Flask, request, render_template, redirect
 from flask_login import LoginManager, login_user, logout_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy

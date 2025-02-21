@@ -100,14 +100,16 @@ def signedin():
     return render_template('signedin.html', subjects=subjects, signedin=True, beste_note=beste_note, schlechteste_note=schlechteste_note, durchschnitt=durchschnitt, beste_muendliche_note=beste_muendliche_note, schlechteste_muendliche_note=schlechteste_muendliche_note, durchschnitt_muendliche_note=durchschnitt_muendliche_note)
 
 @app.route('/fach_hinzufügen', methods=['POST', 'GET'])
-def fächer():
+def fach_hinzufügen():
     subjects = Fach.query.filter_by(user_id=current_id).all()
     if len(request.form)>0:
         name = request.form.get('name')
-        fach = Fach(name=name, user_id=current_id)
-        db.session.add(fach)
-        db.session.commit()
-        return redirect('/signedin')
+        if not name in [subject.name for subject in subjects]:
+            fach = Fach(name=name, user_id=current_id)
+            db.session.add(fach)
+            db.session.commit()
+            return redirect('/signedin')
+        return render_template('fach_hinzufügen.html', subjects=subjects, fach_hinzufügen=True, error='Fach existiert bereits')
     return render_template('fach_hinzufügen.html', subjects=subjects, fach_hinzufügen=True)
 
 @app.route('/fach_uebersicht/<string:subject>')

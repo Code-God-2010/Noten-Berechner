@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1 class="ultimate-heading">Noten-Berechner</h1>
-    <h1>{% block title %}{% endblock %}</h1>
+    <h1 class="heading">{% block title %}{% endblock %}</h1>
     <div class="links-div">
         <a class="link {{ signedin }}" href="/signedin">Übersicht</a><br>
         <a class="link {{ zeugnisnote }}" href="/zeugnisnote">Zeugnisnote Berechnen</a><br>
@@ -17,6 +17,7 @@
         <a class="link {{ muendliche_note_hinzufügen }}" href="/muendliche_note_hinzufügen">Mündliche Note Hinzufügen</a><br>
         <a class="link {{ reset }}" href="/reset">Reset</a><br>
         <a class="link {{ delete }}" href="/delete">Account Löschen</a><br>
+        <a class="link {{ logout }}" href="/logout">Logout</a><br>
         {% block subject_links %}  
         {% for subject2 in subjects %}
         {% if subject2 != subject %}

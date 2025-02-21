@@ -26,7 +26,7 @@ a{
 body{
     background-color: rgb(229, 247, 250);
 }
-h1{
+.heading{
     color: black;
     font-size: 48px;
     text-align: center;
@@ -115,6 +115,7 @@ input[type='checkbox']{
     width: 350px;
     position: absolute;
     text-align: left;
-    padding-top: 22px;
+    margin-top: 0%;
+    padding-top: 15px;
     padding-left: 150px;
 }

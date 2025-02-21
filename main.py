@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect
+from flask_login import LoginManager, login_user, logout_user, UserMixin
 from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 import sqlalchemy.exc
@@ -8,15 +9,21 @@ def hash_password(password):
 
 def check_password(hashedPassword, password):
     return check_password_hash(hashedPassword, password)
+
+login_manager = LoginManager()
 app = Flask(__name__)
+login_manager.init_app(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///Fächer.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.secret_key = 'd7db8ae39e4a13a6a03f2f0e'
 db = SQLAlchemy(app)
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(80), nullable=False)
     fächer = db.relationship('Fach', backref = 'user', lazy = 'dynamic')
+    noten = db.relationship('Note', backref = 'user', lazy = 'dynamic')
+    muendliche_noten = db.relationship('Muendliche_Note', backref = 'user', lazy = 'dynamic')
 
 class Fach(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,11 +36,18 @@ class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     wert = db.Column(db.Integer, nullable=False)
     fach_id = db.Column(db.Integer, db.ForeignKey('fach.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 class Muendliche_Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     wert = db.Column(db.Integer, nullable=False)
     fach_id = db.Column(db.Integer, db.ForeignKey('fach.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+@login_manager.user_loader
+def loader_user(user_id):
+    return User.query.get(user_id)
+
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/signup', methods=['POST', 'GET'])
 def home():
@@ -61,18 +75,24 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and check_password(user.password, password):
             current_id = user.id
+            login_user(user)
             return redirect('/signedin')
         else:
             return render_template('login.html', error='Benutzername oder Passwort ist falsch')
     return render_template('login.html')
 
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect('/')
+
 @app.route('/signedin', methods=['POST', 'GET'])
 def signedin():
-    noten = Note.query.all()
+    noten = Note.query.filter_by(user_id=current_id).all()
     beste_note = min([note.wert for note in noten]) if len(noten) > 0 else 0.0
     schlechteste_note = max([note.wert for note in noten]) if len(noten) > 0 else 0.0
     durchschnitt = sum([note.wert for note in noten])/len(noten) if len(noten) > 0 else 0.0
-    muendliche_noten = Muendliche_Note.query.all()
+    muendliche_noten = Muendliche_Note.query.filter_by(user_id=current_id).all()
     beste_muendliche_note = min([muendliche_note.wert for muendliche_note in muendliche_noten]) if len(muendliche_noten) > 0 else 0.0
     schlechteste_muendliche_note = max([muendliche_note.wert for muendliche_note in muendliche_noten]) if len(muendliche_noten) > 0 else 0.0
     durchschnitt_muendliche_note = sum([muendliche_note.wert for muendliche_note in muendliche_noten])/len(muendliche_noten) if len(muendliche_noten) > 0 else 0.0
@@ -112,7 +132,7 @@ def noten_hinzufügen():
         grade = request.form.get('grade')
         fach_obj = Fach.query.filter_by(name=subject, user_id=current_id).first()
         if fach_obj:
-            note = Note(wert=grade, fach_id=fach_obj.id)
+            note = Note(wert=grade, fach_id=fach_obj.id, user_id=current_id)
             db.session.add(note)
             db.session.commit()
             return redirect(f'/fach_uebersicht/{subject}')
@@ -128,7 +148,7 @@ def muendliche_noten_hinzufügen():
         grade = request.form.get('grade')
         fach_obj = Fach.query.filter_by(name=subject, user_id=current_id).first()
         if fach_obj:
-            muendliche_note = Muendliche_Note(wert=grade, fach_id=fach_obj.id)
+            muendliche_note = Muendliche_Note(wert=grade, fach_id=fach_obj.id, user_id=current_id)
             db.session.add(muendliche_note)
             db.session.commit()
             return redirect(f'/fach_uebersicht/{subject}')

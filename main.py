@@ -5,7 +5,7 @@ Implement a user profile page where users can view and edit their personal infor
 Add a feature to change the password securely.
 2.
 Subject Management:
-Allow users to edit or delete subjects they have added.
+Allow users to delete subjects they have added.
 3.
 Note Management:
 Allow users to edit or delete notes they have added.
@@ -284,6 +284,11 @@ def zeugnisnote():
                 else:
                     return render_template('zeugnisnote.html', error='Keine schriftlichen Noten vorhanden', zeugnisnote=True) 
     return render_template('zeugnisnote.html', zeugnisnote=True, subjects=subjects)
+
+@app.route('/graph', methods=['GET', 'POST'])
+def graph():
+    subjects = Fach.query.filter_by(user_id=current_id).all()
+    return render_template('graph.html', graph=True, subjects=subjects)
 
 if __name__ == '__main__':
     app.run(debug=True)

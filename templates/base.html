@@ -12,10 +12,10 @@
     <h1 class="heading">{% block title %}{% endblock %}</h1>
     <div class="theme-switch-wrapper">
         <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" onclick="test()"/>
+            <input type="checkbox" id="checkbox"/>
             <div class="slider round"></div>
         </label>
-        <em>Enable Dark Mode!</em>
+        <em>Dark Mode</em>
     </div>
     <div class="links-div">
         <a class="link {{ signedin }}" href="/signedin">Übersicht</a><br>
@@ -26,6 +26,7 @@
         <a class="link {{ reset }}" href="/reset">Reset</a><br>
         <a class="link {{ delete }}" href="/delete">Account Löschen</a><br>
         <a class="link {{ logout }}" href="/logout">Logout</a><br>
+        <a class="link {{ graph }}" href="/graph">Graph</a><br>
     </div>
     {% block content %}
     {% endblock %}

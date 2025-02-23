@@ -7,12 +7,11 @@
 .subjects {
     left: 66%;
     max-height: 650px;
-    overflow: scroll;
-    z-index: -1;
+    overflow-y: scroll;
 }
 .grades {
     height: 124px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 .links-div{
     color: var(--textColor);
@@ -206,4 +205,11 @@ input:checked + .slider:before {
   border-color: #000000;
   border-radius: 12px;
   border-width: 2px;
+  position: relative;
+  z-index: 3;
+}
+
+img {
+  width: 450px;
+  z-index: 2;
 }

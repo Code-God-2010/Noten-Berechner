@@ -46,6 +46,7 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlalchemy
 import sqlalchemy.exc
 from werkzeug.security import check_password_hash, generate_password_hash
+from graph import create_graph
 def hash_password(password):
     return generate_password_hash(password)
 
@@ -88,7 +89,7 @@ class Muendliche_Note(db.Model):
 
 @login_manager.user_loader
 def loader_user(user_id):
-    return User.query.get(user_id)
+    return User.query.filter_by(id=user_id).first()
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/signup', methods=['POST', 'GET'])
@@ -288,6 +289,9 @@ def zeugnisnote():
 @app.route('/graph', methods=['GET', 'POST'])
 def graph():
     subjects = Fach.query.filter_by(user_id=current_id).all()
+    noten = Note.query.filter_by(user_id=current_id).all()
+    print([note.wert for note in noten])
+    create_graph([note.wert for note in noten])
     return render_template('graph.html', graph=True, subjects=subjects)
 
 if __name__ == '__main__':

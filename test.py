@@ -1,0 +1,1 @@
+print([i/4 for i in range(1, 25)])

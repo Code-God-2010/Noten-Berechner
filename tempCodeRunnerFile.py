@@ -1,1 +1,1 @@
-Mathe
+C:\Users\linla\Documents\GitHub\Noten-Berechner\static\graphs

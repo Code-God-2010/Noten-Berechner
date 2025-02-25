@@ -269,21 +269,23 @@ def zeugnisnote():
                 muendliche_note = Muendliche_Note.query.filter_by(fach_id=subject.id).all()
                 noten = Note.query.filter_by(fach_id=subject.id).all()
                 if not muendliche_note:
-                    return render_template('zeugnisnote.html', error='Keine muendlichen Noten vorhanden', zeugnisnote=True)
+                    return render_template('zeugnisnote.html', subjects=subjects, error='Keine muendlichen Noten vorhanden', zeugnisnote=True)
                 if not noten:
-                    return render_template('zeugnisnote.html', error='Keine schriftlichen Noten vorhanden', zeugnisnote=True)
+                    return render_template('zeugnisnote.html', subjects=subjects, error='Keine schriftlichen Noten vorhanden', zeugnisnote=True)
                 noten_durchschnitt = sum([temp.wert for temp in noten])/len(noten)
                 muendlicher_durchschnitt = sum([temp.wert for temp in muendliche_note])/len(muendliche_note)
                 muendlich_prozent = request.form.get('muendlich_prozent')
                 zeugnis_note = (muendlicher_durchschnitt*int(muendlich_prozent)+noten_durchschnitt*(100-int(muendlich_prozent)))/100
-                return render_template('zeugnisnote.html', note=zeugnis_note, zeugnisnote=True)
+                return render_template('zeugnisnote.html', subjects=subjects, note=zeugnis_note, zeugnisnote=True)
             else:
                 noten = Note.query.filter_by(fach_id=subject.id).all()
                 if noten:
                     zeugnis_note=sum([temp.wert for temp in noten])/len(noten)
-                    return render_template('zeugnisnote.html', note=zeugnis_note, zeugnisnote=True)
+                    return render_template('zeugnisnote.html', subjects=subjects, note=zeugnis_note, zeugnisnote=True)
                 else:
-                    return render_template('zeugnisnote.html', error='Keine schriftlichen Noten vorhanden', zeugnisnote=True) 
+                    return render_template('zeugnisnote.html', subjects=subjects, error='Keine schriftlichen Noten vorhanden', zeugnisnote=True)
+        else:
+            return render_template('zeugnisnote.html', subjects=subjects, error='Kein Fach mit diesem Namen gefunden', zeugnisnote=True)
     return render_template('zeugnisnote.html', zeugnisnote=True, subjects=subjects)
 
 @app.route('/graph', methods=['GET', 'POST'])

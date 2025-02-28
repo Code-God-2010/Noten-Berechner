@@ -11,10 +11,11 @@
     <div class="content">
     <form method="post">
         <label for="username">Benutzername:</label><br>
-        <input class="input" type="text" id="username" name="username" required><br>
+        <input class="input" type="text" id="username" name="username" maxlength="20" required><br>
         <label for="password">Passwort:</label><br>
-        <input class="input" type="password" id="password" name="password" required><br>
+        <input class="input" type="password" id="password" name="password" maxlength="2000" required><br>
         <input type="submit" value="Anmelden">
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
     </form>
     {% if error %}
     <p style="color: red;">{{ error }}</p>

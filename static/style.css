@@ -54,6 +54,7 @@ ol{
     list-style-position: outside;
     margin: auto;
     padding: 10px;
+    padding-left: 10px;
     width: 100px;
     text-align: center;
 }
@@ -212,4 +213,12 @@ input:checked + .slider:before {
 img {
   width: 450px;
   z-index: 2;
+}
+.grade-list-item{
+  display: flex;
+  align-items: start;
+}
+
+li {
+  margin-top: 10px;
 }

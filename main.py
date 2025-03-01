@@ -1,18 +1,9 @@
 """ 
-Protection against brute forcing
 Content without login
 1.
 User Profile:
 Implement a user profile page where users can view and edit their personal information, such as name, email, and password.
 Add a feature to change the password securely.
-2.
-Subject Management:
-Allow users to delete subjects they have added.
-3.
-Note Management:
-Allow users to edit or delete notes they have added.
-Implement a feature to sort notes by subject or grade.
-Add a feature to filter notes by subject or grade range.
 4.
 UI Design:
 Use a responsive design to ensure the application looks good on different devices.
@@ -21,18 +12,10 @@ Use color schemes that are friendly and appealing to the eyes.
 Add a feature to customize the appearance of the application, such as changing the font, background color, or layout.
 7.
 Security:
-Implement a secure login system with password hashing and salting.
 Add a feature to reset the password if the user forgets it.
-Implement a feature to delete the user's account and all associated data.
-8.
-Data Validation:
-Validate user inputs to ensure they are in the correct format and within the expected range.
-Implement a feature to prevent users from entering invalid grades or subjects.
 10.
 Accessibility:
-Ensure the application is accessible to users with disabilities by following WCAG (Web Content Accessibility Guidelines) standards.
 Add a feature to adjust the font size and contrast for better readability.
-Implement a feature to provide alternative text descriptions for images.
 11.
 Internationalization:
 Add support for multiple languages, allowing users to switch between different languages for the application interface.
@@ -50,6 +33,9 @@ from flask_mysqldb import MySQL
 import os
 from dotenv import load_dotenv
 import MySQLdb
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 def hash_password(password):
     return generate_password_hash(password)
 
@@ -66,7 +52,12 @@ app.config['CACHE_TYPE'] = 'SimpleCache'
 app.config['CACHE_DEFAULT_TIMEOUT'] = 300
 cache = Cache(app)
 mysql = MySQL(app)
-
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["2000 per day", "5000 per hour"],
+    storage_uri="memory://",
+)
 class User:
     def __init__(self, data):
         self.id = data[0]
@@ -182,6 +173,7 @@ def home():
     return render_template('signup.html')
 
 @app.route('/login', methods=['POST', 'GET'])
+@limiter.limit('3/second')
 def login():
     global current_id
     if len(request.form)>0:
@@ -237,7 +229,7 @@ def fach_hinzufügen():
         return render_template('fach_hinzufügen.html', subjects=subjects, fach_hinzufügen=True, error='Fach existiert bereits')
     return render_template('fach_hinzufügen.html', subjects=subjects, fach_hinzufügen=True)
 
-@app.route('/fach_uebersicht/<string:subject>')
+@app.route('/fach_uebersicht/<string:subject>', methods=['GET', 'POST'])
 def fach_uebersicht(subject):
     subjects = load_subjects(current_id)
     subject_obj = load_one_subject(current_id, subject)
@@ -249,6 +241,27 @@ def fach_uebersicht(subject):
         noten_avg = sum([note.number for note in noten]) / len(noten)
     if len(muendliche_noten)>0:
         muendliche_noten_avg = sum([muendliche_note.number for muendliche_note in muendliche_noten]) / len(muendliche_noten)
+    if len(request.form)>0:
+        action = request.form.get('action')
+        if action == 'delete':
+            grades = load_grades_for_subject(subject_obj.id)
+            for grade in grades:
+                cursor = mysql.connection.cursor()
+                cursor.execute(f'DELETE FROM grade WHERE id={grade.id}')
+                mysql.connection.commit()
+                cursor.close()
+            cursor = mysql.connection.cursor()
+            cursor.execute(f'DELETE FROM subject WHERE id={subject_obj.id}')
+            mysql.connection.commit()
+            cursor.close()
+            return redirect('/signedin')
+        elif action == 'delete_grade':
+            grade_id = request.form.get('id')
+            cursor = mysql.connection.cursor()
+            cursor.execute(f'DELETE FROM grade WHERE id={int(grade_id)}')
+            mysql.connection.commit()
+            cursor.close()
+            return redirect(f'/fach_uebersicht/{subject}')
     return render_template('fachuebersicht.html', fach_uebersicht=True, subjects=subjects, noten_avg=noten_avg, muendliche_noten_avg=muendliche_noten_avg, subject=subject_obj, noten=noten, muendliche_noten=muendliche_noten)
 
 @app.route('/note_hinzufügen', methods=['POST', 'GET'])

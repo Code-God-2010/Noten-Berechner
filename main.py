@@ -10,9 +10,6 @@ Use a responsive design to ensure the application looks good on different device
 Implement a clean and intuitive user interface with clear navigation and easy-to-understand instructions.
 Use color schemes that are friendly and appealing to the eyes.
 Add a feature to customize the appearance of the application, such as changing the font, background color, or layout.
-7.
-Security:
-Add a feature to reset the password if the user forgets it.
 10.
 Accessibility:
 Add a feature to adjust the font size and contrast for better readability.
@@ -20,10 +17,6 @@ Add a feature to adjust the font size and contrast for better readability.
 Internationalization:
 Add support for multiple languages, allowing users to switch between different languages for the application interface.
 Implement a feature to display dates and times in the user's preferred format.
-12.
-Performance Optimization:
-Optimize the database queries to improve the application's performance.
-Implement caching mechanisms to reduce the number of database queries.
 """
 from flask import Flask, request, render_template, redirect
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -150,7 +143,7 @@ def load_user(id):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/signup', methods=['POST', 'GET'])
 def home():
-    global current_id
+    global current_id, subjects
     if len(request.form)>0:
         username = request.form.get('username')
         password = request.form.get('password')
@@ -166,6 +159,7 @@ def home():
             else:
                 cursor.execute(f"SELECT * FROM user WHERE username = '{username}'")
             current_id = User(cursor.fetchone()).id
+            subjects = load_subjects(current_id)
             cursor.close()
         except MySQLdb.IntegrityError:
             return render_template('signup.html', error='Benutzername wird bereits benutzt')
@@ -175,7 +169,7 @@ def home():
 @app.route('/login', methods=['POST', 'GET'])
 @limiter.limit('3/second')
 def login():
-    global current_id
+    global current_id, subjects
     if len(request.form)>0:
         username = request.form.get('username')
         password = request.form.get('password')
@@ -192,6 +186,7 @@ def login():
             return render_template('login.html', error='Benutzername oder Passwort ist falsch')
         if user and check_password(user.password, password):
             current_id = user.id
+            subjects = load_subjects(current_id)
             return redirect('/signedin')
         else:
             return render_template('login.html', error='Benutzername oder Passwort ist falsch')
@@ -199,11 +194,13 @@ def login():
 
 @app.route('/logout')
 def logout():
+    global current_id, subjects
     cache.clear()
     return redirect('/')
 
 @app.route('/signedin', methods=['POST', 'GET'])
 def signedin():
+    global current_id, subjects
     noten = load_grades(current_id)
     beste_note = min([note.number for note in noten]) if len(noten) > 0 else 0.0
     schlechteste_note = max([note.number for note in noten]) if len(noten) > 0 else 0.0
@@ -212,12 +209,11 @@ def signedin():
     beste_muendliche_note = min([muendliche_note.number for muendliche_note in muendliche_noten]) if len(muendliche_noten) > 0 else 0.0
     schlechteste_muendliche_note = max([muendliche_note.number for muendliche_note in muendliche_noten]) if len(muendliche_noten) > 0 else 0.0
     durchschnitt_muendliche_note = sum([muendliche_note.number for muendliche_note in muendliche_noten])/len(muendliche_noten) if len(muendliche_noten) > 0 else 0.0
-    subjects = load_subjects(current_id)
     return render_template('signedin.html', subjects=subjects, signedin=True, beste_note=beste_note, schlechteste_note=schlechteste_note, durchschnitt=durchschnitt, beste_muendliche_note=beste_muendliche_note, schlechteste_muendliche_note=schlechteste_muendliche_note, durchschnitt_muendliche_note=durchschnitt_muendliche_note)
 
 @app.route('/fach_hinzufügen', methods=['POST', 'GET'])
 def fach_hinzufügen():
-    subjects = load_subjects(current_id)
+    global current_id, subjects
     if len(request.form)>0:
         name = request.form.get('name')
         if not name in [subject for subject in subjects]:
@@ -225,13 +221,14 @@ def fach_hinzufügen():
             cursor.execute("INSERT INTO subject (name, user_id) VALUES (%s, %s)", (name, current_id))
             mysql.connection.commit()
             cursor.close()
+            subjects = load_subjects(current_id)
             return redirect('/signedin')
         return render_template('fach_hinzufügen.html', subjects=subjects, fach_hinzufügen=True, error='Fach existiert bereits')
     return render_template('fach_hinzufügen.html', subjects=subjects, fach_hinzufügen=True)
 
 @app.route('/fach_uebersicht/<string:subject>', methods=['GET', 'POST'])
 def fach_uebersicht(subject):
-    subjects = load_subjects(current_id)
+    global current_id, subjects
     subject_obj = load_one_subject(current_id, subject)
     noten = load_grades_for_subject(subject_obj.id)
     muendliche_noten = load_oral_grades_for_subject(subject_obj.id)
@@ -266,7 +263,7 @@ def fach_uebersicht(subject):
 
 @app.route('/note_hinzufügen', methods=['POST', 'GET'])
 def noten_hinzufügen():
-    subjects = load_subjects(current_id)
+    global current_id, subjects
     if len(request.form)>0:
         subject = request.form.get('subject')
         grade = request.form.get('grade')
@@ -283,7 +280,7 @@ def noten_hinzufügen():
 
 @app.route('/muendliche_note_hinzufügen', methods=['POST', 'GET'])
 def muendliche_noten_hinzufügen():
-    subjects = load_subjects(current_id)
+    global current_id, subjects
     if len(request.form)>0:
         subject = request.form.get('subject')
         grade = request.form.get('grade')
@@ -300,7 +297,7 @@ def muendliche_noten_hinzufügen():
 
 @app.route('/reset', methods=['GET', 'POST'])
 def reset():
-    subjects = load_subjects(current_id)
+    global current_id, subjects
     if len(request.form)>0:
         captcha = request.form.get('captcha')
         if captcha == 'W68HP':
@@ -331,7 +328,7 @@ def reset():
     return render_template('reset.html', reset=True, subjects=subjects)
 @app.route('/delete', methods=['GET', 'POST'])
 def delete():
-    subjects = load_subjects(current_id)
+    global current_id, subjects
     if len(request.form)>0:
         captcha = request.form.get('captcha')
         if captcha == 'W68HP':
@@ -369,7 +366,7 @@ def delete():
 
 @app.route('/zeugnisnote', methods=['GET', 'POST'])
 def zeugnisnote():
-    subjects = load_subjects(current_id)
+    global current_id, subjects
     if len(request.form)>0:
         fach = request.form.get('fach')
         muendlich = request.form.get('muendlich')
@@ -401,7 +398,7 @@ def zeugnisnote():
 
 @app.route('/graph', methods=['GET', 'POST'])
 def graph():
-    subjects = load_subjects(current_id)
+    global current_id, subjects
     noten = load_grades(current_id)
     create_graph([note.number for note in noten])
     return render_template('graph.html', graph=True, subjects=subjects)

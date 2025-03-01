@@ -10,7 +10,14 @@
     <div class="grades">
         <ol>
             {% for grade in noten %}
+            <div class="grade-list-item">
                 <li>{{ grade.number }}</li>
+                <form method="post">
+                    <input type="hidden" name="action" value="delete_grade">
+                    <input type="hidden" name="id" value="{{ grade.id }}">
+                    <input type="submit" value="Löschen">
+                </form>
+            </div>
             {% endfor %}
         </ol>
     </div>
@@ -22,11 +29,20 @@
         <ol>
             {% for grade in muendliche_noten %}
                 <li>{{ grade.number }}</li>
+                <form method="post">
+                    <input type="hidden" name="action" value="delete_grade">
+                    <input type="hidden" name="id" value="{{ grade.id }}">
+                    <input type="submit" value="Löschen">
+                </form>
             {% endfor %}
         </ol>
     </div>
     {% if muendliche_noten_avg %}
     <p>Muendliche Noten Durchschnitt: {{ muendliche_noten_avg }}</p>
     {% endif %}
+    <form method="post" onsubmit="return confirm('Möchtest du {{ subject.name }} löschen?');">
+        <input type="hidden" name="action" value="delete">
+        <input type="submit" value="Fach löschen">
+    </form>
 </div>
 {% endblock %}

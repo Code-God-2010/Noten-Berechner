@@ -35,3 +35,7 @@ function nodark() {
     r.style.setProperty('--linkHover', '#1995AD');
     r.style.setProperty('--textColor', '#000000');
 }
+
+function confirmation(message) {
+  confirm(message);
+}

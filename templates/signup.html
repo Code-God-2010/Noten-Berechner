@@ -10,11 +10,11 @@
     <h1 class="heading">Sign up</h1>
     <div class="content signup">
     <form method="post">
-        <label class="" for="username">Benutzername:</label><br>
-        <input class="" type="text" id="username" name="username" required><br>
-        <label class="" for="password">Passwort:</label><br>
-        <input class="" type="password" id="password" name="password" required><br>
-        <input class="" type="submit" value="Anmelden">
+        <label for="username">Benutzername:</label><br>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">Passwort:</label><br>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" value="Anmelden">
         <script src="{{ url_for('static', filename='script.js') }}"></script>
     </form>
     {% if error %}

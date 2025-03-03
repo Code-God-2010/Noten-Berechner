@@ -10,14 +10,7 @@
     <div class="grades">
         <ol>
             {% for grade in noten %}
-            <div class="grade-list-item">
-                <li>{{ grade.number }}</li>
-                <form method="post">
-                    <input type="hidden" name="action" value="delete_grade">
-                    <input type="hidden" name="id" value="{{ grade.id }}">
-                    <input type="submit" value="Löschen">
-                </form>
-            </div>
+            <li>{{ grade.number }}</li>
             {% endfor %}
         </ol>
     </div>

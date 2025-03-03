@@ -6,17 +6,10 @@ Implement a user profile page where users can view and edit their personal infor
 Add a feature to change the password securely.
 4.
 UI Design:
-Use a responsive design to ensure the application looks good on different devices.
-Implement a clean and intuitive user interface with clear navigation and easy-to-understand instructions.
-Use color schemes that are friendly and appealing to the eyes.
 Add a feature to customize the appearance of the application, such as changing the font, background color, or layout.
-10.
-Accessibility:
-Add a feature to adjust the font size and contrast for better readability.
 11.
 Internationalization:
 Add support for multiple languages, allowing users to switch between different languages for the application interface.
-Implement a feature to display dates and times in the user's preferred format.
 """
 from flask import Flask, request, render_template, redirect
 from werkzeug.security import check_password_hash, generate_password_hash

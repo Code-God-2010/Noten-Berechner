@@ -8,7 +8,9 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-    <h1 class="ultimate-heading">Noten-Berechner</h1>
+    <div class="account">
+        <em>WWWWWWWWWWWWWWWWWWWW</em>
+    </div>
     <h1 class="heading">{% block title %}{% endblock %}</h1>
     <div class="container">
         <div class="links-div">
@@ -22,8 +24,10 @@
             <a class="link {{ logout }}" href="/logout">Logout</a><br>
             <a class="link {{ graph }}" href="/graph">Graph</a><br>
         </div>
-        {% block content %}
-        {% endblock %}
+        <div class="middle">
+            {% block content %}
+            {% endblock %}
+        </div>
         <div class="subjects links-div">
             <h2>Fächer:</h2>
             {% block subject_links %}  

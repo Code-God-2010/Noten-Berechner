@@ -155,9 +155,9 @@ def home():
             cur.close()
             cursor = mysql.connection.cursor()
             if username.isdigit():
-                cursor.execute(f"SELECT * FROM user WHERE username = {username}".replace('"', ''))
+                cursor.execute(("SELECT * FROM user WHERE username = %s", username).replace('"', ''))
             else:
-                cursor.execute(f"SELECT * FROM user WHERE username = '{username}'")
+                cursor.execute(f"SELECT * FROM user WHERE username = '%s'", username)
             current_id = User(cursor.fetchone()).id
             subjects = load_subjects(current_id)
             cursor.close()
@@ -174,9 +174,9 @@ def login():
         password = request.form.get('password')
         cursor = mysql.connection.cursor()
         if username.isdigit():
-            cursor.execute(f"SELECT * FROM user WHERE username = {username}".replace('"', ''))
+            cursor.execute("SELECT * FROM user WHERE username = %s", (username,))
         else:
-            cursor.execute(f"SELECT * FROM user WHERE username = '{username}'")
+            cursor.execute("SELECT * FROM user WHERE username = %s", (username,))
         user = cursor.fetchone()
         cursor.close()
         try:
@@ -243,21 +243,15 @@ def fach_uebersicht(subject):
             grades = load_grades_for_subject(subject_obj.id)
             for grade in grades:
                 cursor = mysql.connection.cursor()
-                cursor.execute(f'DELETE FROM grade WHERE id={grade.id}')
+                cursor.execute('DELETE FROM grade WHERE id=%s', (grade.id,))
                 mysql.connection.commit()
                 cursor.close()
             cursor = mysql.connection.cursor()
-            cursor.execute(f'DELETE FROM subject WHERE id={subject_obj.id}')
+            cursor.execute('DELETE FROM subject WHERE id=%s', (subject_obj.id,))
             mysql.connection.commit()
             cursor.close()
+            subjects = load_subjects(current_id)
             return redirect('/signedin')
-        elif action == 'delete_grade':
-            grade_id = request.form.get('id')
-            cursor = mysql.connection.cursor()
-            cursor.execute(f'DELETE FROM grade WHERE id={int(grade_id)}')
-            mysql.connection.commit()
-            cursor.close()
-            return redirect(f'/fach_uebersicht/{subject}')
     return render_template('fachuebersicht.html', fach_uebersicht=True, subjects=subjects, noten_avg=noten_avg, muendliche_noten_avg=muendliche_noten_avg, subject=subject_obj, noten=noten, muendliche_noten=muendliche_noten)
 
 @app.route('/note_hinzufügen', methods=['POST', 'GET'])

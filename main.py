@@ -165,7 +165,6 @@ def home():
             return render_template('signup.html', error='Benutzername wird bereits benutzt')
         return redirect('/signedin')
     return render_template('signup.html')
-
 @app.route('/login', methods=['POST', 'GET'])
 @limiter.limit('3/second')
 def login():

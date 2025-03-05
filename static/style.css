@@ -157,3 +157,7 @@ input[type='checkbox']{
 .signup {
     margin: auto;
 }
+
+.hidden {
+    visibility: hidden;
+}

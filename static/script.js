@@ -39,3 +39,21 @@ function nodark() {
 function confirmation(message) {
   confirm(message);
 }
+
+let muendlich_checkbox = document.getElementById('muendlich')
+muendlich_checkbox.addEventListener('change', function() {
+  if (!muendlich_checkbox.checked) {
+    const muendlich_percent = document.getElementById('muendlich_prozent');
+    const muendlich_percent_label = document.getElementsByTagName('label')[2];
+    muendlich_percent.removeAttribute('required');
+    muendlich_percent.hidden = true;
+    muendlich_percent_label.style.visibility = 'hidden';
+  }
+  else {
+    const muendlich_percent = document.getElementById('muendlich_prozent');
+    const muendlich_percent_label = document.getElementById('muendlich_prozent_label');
+    muendlich_percent.setAttribute('required', '');
+    muendlich_percent.hidden = false;
+    muendlich_percent_label.style.visibility = 'visible';;
+  }
+});

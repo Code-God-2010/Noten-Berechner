@@ -11,9 +11,9 @@
     <div class="content signup">
     <form method="post">
         <label for="username">Benutzername:</label><br>
-        <input type="text" id="username" name="username" required><br>
+        <input type="text" autofocus autocomplete="off" id="username" name="username" autofocus autocomplete="off" required><br>
         <label for="password">Passwort:</label><br>
-        <input type="password" id="password" name="password" required><br>
+        <input type="password" autocomplete="off" id="password" name="password" autocomplete="off" required><br>
         <input type="submit" value="Anmelden">
         <script src="{{ url_for('static', filename='script.js') }}"></script>
     </form>

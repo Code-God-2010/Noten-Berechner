@@ -30,10 +30,10 @@ function darkmode() {
 //function for checkbox when checkbox is not checked
 function nodark() {
     var r = document.querySelector(':root');
-    r.style.setProperty('--background', '#F1F1F2');
-    r.style.setProperty('--divColor', '#A1D6E2');
-    r.style.setProperty('--linkHover', '#1995AD');
-    r.style.setProperty('--textColor', '#000000');
+    r.style.setProperty('--background', '#FFF0E5');
+    r.style.setProperty('--divColor', '#FFFFFF');
+    r.style.setProperty('--linkHover', '#3A10E5');
+    r.style.setProperty('--textColor', '#10162F');
 }
 
 function confirmation(message) {

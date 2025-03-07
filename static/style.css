@@ -15,12 +15,10 @@
 
 .links-div{
     color: var(--textColor);
-    background-color: var(--divColor);
     text-align: left;
     padding: 20px;
     padding-left: 50px;
     border-radius: 12px;
-    box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
     font-size: 24px;
     width: 500px;
     line-height: 50px;
@@ -41,10 +39,12 @@ a{
     color: var(--textColor);
     font-size: 20;
 }
+
 .link:hover{
     color: var(--linkHover);
     text-decoration: underline;
 }
+
 body{
     background-color: var(--background);
 }
@@ -67,11 +67,6 @@ body{
     text-align: center;
     background-color: var(--divColor);
     color: var(--textColor);
-}
-
-@keyframes active {
-    from {padding-left: 0px;}
-    to {padding-left: 12px;}
 }
 
 .graph {
@@ -139,15 +134,20 @@ input[type='checkbox']{
     margin-left: 15px;
 }
 .True {
-    animation: active;
-    animation-duration: 0.5s;
     color: var(--textColor);
     text-decoration: underline;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 12px;
-    padding-right: 12px;
-    margin-left: 15px;
+    padding-left: 15px !important;
+    border-left-color: #000000;
+    border-left-style: solid;
+    border-left-width: 5px;
+    background-color: #F6E8DE !important;
+}
+
+.link {
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
 }
 
 .login {

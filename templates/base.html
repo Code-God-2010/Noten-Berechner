@@ -28,7 +28,7 @@
             <h2>Fächer:</h2>
             {% block subject_links %}  
             {% for subject2 in subjects %}
-            {% if subject2 != subject %}
+            {% if subject2.name != subject %}
             <a class="link" href="/fach_uebersicht/{{ subject2.name }}">{{ subject2.name }}</a><br>
             {% else %}
             <a class="link active" href="/fach_uebersicht/{{ subject2.name }}">{{ subject2.name }}</a><br>

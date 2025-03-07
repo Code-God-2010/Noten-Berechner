@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% block site_title %}{{ subject.name }}{% endblock %}
-{% block title %}{{ subject.name }}{% endblock %}
+{% block site_title %}{{ subject }}{% endblock %}
+{% block title %}{{ subject }}{% endblock %}
 {% block subject_links %}
 {{ super() }}
 {% endblock %}
@@ -33,9 +33,9 @@
         </ol>
     </div>
     {% if muendliche_noten_avg %}
-    <p>Muendliche Noten Durchschnitt: {{ muendliche_noten_avg }}</p>
+    <p>Mündliche Noten Durchschnitt: {{ muendliche_noten_avg }}</p>
     {% endif %}
-    <form method="post" onsubmit="return confirm('Möchtest du {{ subject.name }} löschen?');">
+    <form method="post" onsubmit="return confirm('Möchtest du {{ subject }} löschen?');">
         <input type="hidden" name="action" value="delete">
         <input type="submit" value="Fach löschen">
     </form>

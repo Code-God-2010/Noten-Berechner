@@ -246,7 +246,7 @@ def fach_uebersicht(subject):
             cursor.close()
             subjects = load_subjects(current_id)
             return redirect('/signedin')
-    return render_template('fachuebersicht.html', fach_uebersicht=True, subjects=subjects, noten_avg=noten_avg, muendliche_noten_avg=muendliche_noten_avg, subject=subject_obj, noten=noten, muendliche_noten=muendliche_noten)
+    return render_template('fachuebersicht.html', fach_uebersicht=True, subjects=subjects, noten_avg=noten_avg, muendliche_noten_avg=muendliche_noten_avg, subject=subject_obj.name, noten=noten, muendliche_noten=muendliche_noten)
 
 @app.route('/note_hinzufügen', methods=['POST', 'GET'])
 def noten_hinzufügen():
